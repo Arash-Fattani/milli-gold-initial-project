@@ -1,7 +1,11 @@
 package gold.milli.initialproject.controller;
 
 import gold.milli.initialproject.entity.Account;
+import gold.milli.initialproject.entity.AccountDTOCreate;
+import gold.milli.initialproject.entity.User;
+import gold.milli.initialproject.mapper.AccountCreateMapper;
 import gold.milli.initialproject.service.AccountService;
+import gold.milli.initialproject.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +17,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-
+    private final UserService userService;
+    private final AccountCreateMapper accountCreateMapper;
     @Transactional
     @Operation(
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
     @PostMapping("/user/{id}/create-account")
-    public Account saveAccount(@RequestBody Account account, @PathVariable int id){
-      return accountService.saveAccount(account, id);
+    public AccountDTOCreate saveAccount(@RequestBody AccountDTOCreate account, @PathVariable int id){
+        System.out.println(account.getBalance());
+        User owner = this.userService.findUserById(id);
+        Account newAccount = (this.accountCreateMapper.AccountCreateFromRequest
+                (account, owner, accountService.generateAccountNumber()));
+        return this.accountCreateMapper.AccountDTOCreateFromAccount( accountService.saveAccount(newAccount, id, owner));
     }
     @Transactional
     @Operation(

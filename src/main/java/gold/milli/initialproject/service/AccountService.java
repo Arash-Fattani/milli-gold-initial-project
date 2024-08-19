@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +22,10 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account saveAccount(Account account, int id) {
-        User owner = userService.findUserById(id);
-        Account newAccount = account.toBuilder().owner(owner).build();
-        owner.addAccount(newAccount);
-        return accountRepository.save(newAccount);
+    public Account saveAccount(Account account, int id, User owner) {
+        owner.addAccount(account);
+        System.out.println("##########################" + account.getMoney());
+        return accountRepository.save(account);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class AccountService implements AccountServiceInterface {
             }
             Account newAccount = prevAccount.toBuilder().
                     accountType(account.getAccountType()).
-                    balance(account.getBalance()).
+                    money(account.getMoney()).
                     build();
             return accountRepository.save(newAccount);
         }
@@ -65,5 +66,20 @@ public class AccountService implements AccountServiceInterface {
             }
         }else
             throw new Exception("This account is not registered");
+    }
+    public String generateAccountNumber(){
+        Random random  = new SecureRandom();
+        StringBuilder accountNumber = new StringBuilder();
+        int accountNumberLength = 10;
+        while (true) {
+            for (int i = 0; i < accountNumberLength; i++) {
+                accountNumber.append(random.nextInt(10));
+            }
+            if (!accountRepository.existsAccountByAccountNumber(accountNumber.toString()))
+                break;
+            else
+                accountNumber.delete(0, 10);
+        }
+        return accountNumber.toString();
     }
 }

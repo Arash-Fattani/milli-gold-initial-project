@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findAccountsByOwnerUserId(Integer id);
-
+    boolean existsAccountByAccountNumber(String account);
 }

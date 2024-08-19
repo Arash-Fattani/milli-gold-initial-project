@@ -18,6 +18,7 @@
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <springdoc.openapi.version>2.0.2</springdoc.openapi.version>
+        <hypersistence.version>3.8.2</hypersistence.version>
     </properties>
     <dependencies>
         <dependency>
@@ -68,7 +69,11 @@
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-63</artifactId>
+            <version>${hypersistence.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -107,4 +112,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

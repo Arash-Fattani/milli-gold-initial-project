@@ -20,7 +20,7 @@ public class Account {
     @Column(unique = true)
     private String accountNumber;
     @NonNull
-    private double balance;
+    private Double money;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;

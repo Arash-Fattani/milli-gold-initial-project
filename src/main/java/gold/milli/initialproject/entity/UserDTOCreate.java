@@ -7,8 +7,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Getter
-@Setter
 public class UserDTOCreate {
 
     private String username;
