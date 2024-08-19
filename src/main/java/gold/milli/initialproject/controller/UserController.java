@@ -8,26 +8,18 @@ import gold.milli.initialproject.mapper.UserUpdateMapper;
 import gold.milli.initialproject.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "User Management", description = "Operations related to user management")
 public class UserController {
-    private UserService userService;
-    private UserCreateMapper userMapper;
-    private UserUpdateMapper userUpdateMapper;
-
-    @Autowired
-    public UserController(UserService userService,
-                          UserCreateMapper mapper,
-                          UserUpdateMapper userUpdateMapper) {
-        this.userMapper = mapper;
-        this.userService = userService;
-        this.userUpdateMapper = userUpdateMapper;
-    }
+    private final UserService userService;
+    private final UserCreateMapper userMapper;
+    private final UserUpdateMapper userUpdateMapper;
 
     @PostMapping("/users/create")
     @Operation(

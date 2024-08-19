@@ -4,23 +4,19 @@ import gold.milli.initialproject.entity.Account;
 import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.repository.AccountRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService implements AccountServiceInterface {
-    @Autowired
-    public AccountService(AccountRepository accountRepository, UserService userService) {
-        this.accountRepository = accountRepository;
-        this.userService = userService;
-    }
 
-    private AccountRepository accountRepository;
-    private UserService userService;
+    private final AccountRepository accountRepository;
+    private final UserService userService;
 
     @Override
     @Transactional

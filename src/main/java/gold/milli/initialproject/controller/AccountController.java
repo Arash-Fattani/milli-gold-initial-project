@@ -4,18 +4,15 @@ import gold.milli.initialproject.entity.Account;
 import gold.milli.initialproject.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class AccountController {
-    private AccountService accountService;
-    @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private final AccountService accountService;
 
     @Transactional
     @Operation(
