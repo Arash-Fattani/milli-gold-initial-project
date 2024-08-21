@@ -28,8 +28,8 @@ public class UserController {
     )
     public UserDTOCreate saveUser(@RequestBody UserDTOCreate userRequest) {
 
-        User user = this.userMapper.UserCreateFromRequest(userRequest);
-        return this.userMapper.UserDTOCreateFromUser(userService.saveUser(user));
+        User user = userMapper.UserCreateFromRequest(userRequest);
+        return userMapper.UserDTOCreateFromUser(userService.saveUser(user));
     }
 
     @GetMapping("/users")
@@ -48,9 +48,9 @@ public class UserController {
     )
     public UserDTOUpdate updateUser(@RequestBody UserDTOUpdate userDTOUpdate, @PathVariable Integer id) {
         try {
-            User user = this.userMapper.UserCreateFromRequest(this.userUpdateMapper.UserUpdateFromRequest(userDTOUpdate));
-            return this.userUpdateMapper.UserDTOUpdateFromUser(
-                    this.userMapper.UserDTOCreateFromUser(userService.updateUser(user, id)));
+            User user = userMapper.UserCreateFromRequest(userUpdateMapper.UserUpdateFromRequest(userDTOUpdate));
+            return userUpdateMapper.UserDTOUpdateFromUser(
+                    userMapper.UserDTOCreateFromUser(userService.updateUser(user, id)));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
