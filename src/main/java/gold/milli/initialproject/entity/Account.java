@@ -9,12 +9,12 @@ import lombok.*;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "accountId")
+@EqualsAndHashCode(of = "id")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     @SequenceGenerator(name = "account_seq", allocationSize = 1)
-    private int accountId;
+    private int id;
 
     @NonNull
     @Column(unique = true)

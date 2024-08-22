@@ -39,7 +39,6 @@ public class User {
     private List<Role> roles;
 
     @OneToMany(mappedBy = "owner")
-    @OrderColumn(name = "balance")
     @JsonIgnore
     private List<Account>accounts;
 

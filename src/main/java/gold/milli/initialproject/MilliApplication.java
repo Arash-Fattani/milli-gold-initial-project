@@ -13,10 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 				description = "My first real spring boot project"
 		)
 )
-public class InitialProjectApplication {
+public class MilliApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(InitialProjectApplication.class, args);
+		SpringApplication.run(MilliApplication.class, args);
 	}
 
 }
