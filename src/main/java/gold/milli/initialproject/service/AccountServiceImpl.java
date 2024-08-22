@@ -5,7 +5,6 @@ import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +21,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Account createAccount(Account account, int userId) {
         User owner = userServiceImpl.findUserById(userId);
-        Account newAccount = account.toBuilder().owner(owner).build();
-        owner.addAccount(newAccount);
-        return accountRepository.save(newAccount);
+        account.setOwner(owner);
+        owner.addAccount(account);
+        return accountRepository.save(account);
     }
 
     @Override
@@ -33,9 +32,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @SneakyThrows
     @Transactional
-    public Account updateAccount(int userId, int accountId, Account account) {
+    public Account updateAccount(int userId, int accountId, Account account)throws Exception {
         User owner = userServiceImpl.findUserById(userId);
         Optional<Account> accountHolder = accountRepository.findById(accountId);
         if (accountHolder.isPresent()){
@@ -43,19 +41,17 @@ public class AccountServiceImpl implements AccountService {
             if (prevAccount.getOwner() != owner){
                 throw new Exception("this is not your account");
             }
-            Account newAccount = prevAccount.toBuilder().
-                    accountType(account.getAccountType()).
-                    balance(account.getBalance()).
-                    build();
-            return accountRepository.save(newAccount);
+            prevAccount.setAccountType(
+                    account.getAccountType()!= null ? account.getAccountType() : prevAccount.getAccountType());
+            prevAccount.setBalance(account.getBalance());
+            return accountRepository.save(prevAccount);
         }
         throw new Exception("This account is not registered");
     }
 
     @Override
-    @SneakyThrows
     @Transactional
-    public void deleteAccount(int userId, int accountId) {
+    public void deleteAccount(int userId, int accountId) throws Exception{
         User owner = userServiceImpl.findUserById(userId);
         Optional<Account> accountHolder = accountRepository.findById(accountId);
         if (accountHolder.isPresent()){

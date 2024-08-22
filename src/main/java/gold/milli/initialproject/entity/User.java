@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
 @Entity(name = "Users")
 @EqualsAndHashCode(of = "userId")
 //TODO: when the application's data increases use a higher value for allocation size to increase performance

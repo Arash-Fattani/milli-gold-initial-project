@@ -9,7 +9,7 @@ public interface AccountService {
 
     List<Account> fetchAllAccounts(int userId);
 
-    Account updateAccount(int userId, int accountId, Account account);
+    Account updateAccount(int userId, int accountId, Account account) throws Exception;
 
-    void deleteAccount(int userId, int accountId);
+    void deleteAccount(int userId, int accountId) throws Exception;
 }

@@ -9,7 +9,7 @@ public interface UserService {
 
     List<User> fetchAllUsers();
 
-    User updateUser(User user, Integer userId);
+    User updateUser(User user, Integer userId) throws Exception;
 
     void deleteUser(int userId);
 

@@ -6,7 +6,6 @@ import lombok.*;
 
 @Entity(name = "Accounts")
 @Data
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")

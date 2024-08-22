@@ -34,15 +34,16 @@ public class AccountController {
             description = "Update Account type and balance"
     )
     @PutMapping("/user/{userId}/account/{accountId}/update-account")
-    public Account updateAccount(@PathVariable int userId, @PathVariable int accountId, @RequestBody Account account){
+    public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
+                                 @RequestBody Account account) throws Exception{
         return accountServiceImpl.updateAccount(userId, accountId, account);
     }
     @Operation(
             summary = "delete an account",
             description = "delete a desired account by account id"
     )
-    @DeleteMapping("/user/{userId}/account/{accountId}/delete")
-    public void deleteAccount(@PathVariable int userId, @PathVariable int accountId){
-        accountServiceImpl.deleteAccount(userId, accountId);
+    @DeleteMapping("/user/{userId}/account/{id}/delete")
+    public void deleteAccount(@PathVariable int userId, @PathVariable int id) throws Exception{
+        accountServiceImpl.deleteAccount(userId, id);
     }
 }
