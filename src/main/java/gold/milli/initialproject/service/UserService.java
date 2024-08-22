@@ -17,13 +17,12 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public User saveUser(User user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    @Transactional
-    public List<User> getUsers() {
+    public List<User> fetchAllUsers() {
         return userRepository.findAll();
     }
 
@@ -51,7 +50,6 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    @Transactional
     public User findUserById(int id){
         Optional<User> userHolder =  userRepository.findById(id);
         return userHolder.orElse(null);

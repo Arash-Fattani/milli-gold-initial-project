@@ -20,7 +20,7 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @Transactional
-    public Account saveAccount(Account account, int id) {
+    public Account createAccount(Account account, int id) {
         User owner = userService.findUserById(id);
         Account newAccount = account.toBuilder().owner(owner).build();
         owner.addAccount(newAccount);
@@ -28,12 +28,13 @@ public class AccountService implements AccountServiceInterface {
     }
 
     @Override
-    public List<Account> getAllAccounts(int id) {
+    public List<Account> fetchAllAccounts(int id) {
         return accountRepository.findAccountsByOwnerUserId(id);
     }
 
     @Override
     @SneakyThrows
+    @Transactional
     public Account updateAccount(int uid, int id, Account account) {
         User owner = userService.findUserById(uid);
         Optional<Account> accountHolder = accountRepository.findById(id);
@@ -53,6 +54,7 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     @SneakyThrows
+    @Transactional
     public void deleteAccount(int uid, int id) {
         User owner = userService.findUserById(uid);
         Optional<Account> accountHolder = accountRepository.findById(id);

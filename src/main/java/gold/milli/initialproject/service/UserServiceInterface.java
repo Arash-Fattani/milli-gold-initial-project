@@ -5,9 +5,9 @@ import gold.milli.initialproject.entity.User;
 import java.util.List;
 
 public interface UserServiceInterface {
-    User saveUser(User user);
+    User createUser(User user);
 
-    List<User> getUsers();
+    List<User> fetchAllUsers();
 
     User updateUser(User user, Integer id);
 

@@ -26,10 +26,10 @@ public class UserController {
             summary = "create a user",
             description = "Save a newly registered user"
     )
-    public UserDTOCreate saveUser(@RequestBody UserDTOCreate userRequest) {
+    public UserDTOCreate createUser(@RequestBody UserDTOCreate userRequest) {
 
         User user = userMapper.UserCreateFromRequest(userRequest);
-        return userMapper.UserDTOCreateFromUser(userService.saveUser(user));
+        return userMapper.UserDTOCreateFromUser(userService.createUser(user));
     }
 
     @GetMapping("/users")
@@ -37,11 +37,11 @@ public class UserController {
             summary = "fetch all users",
             description = "fetch all of the registered users"
     )
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<User> fetchAllUsers() {
+        return userService.fetchAllUsers();
     }
 
-    @PutMapping("/users/{id}/profile")
+    @PutMapping("/users/{id}/update")
     @Operation(
             summary = "update a user",
             description = "update user's username or email"

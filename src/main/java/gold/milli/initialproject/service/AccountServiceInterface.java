@@ -5,9 +5,9 @@ import gold.milli.initialproject.entity.Account;
 import java.util.List;
 
 public interface AccountServiceInterface {
-    Account saveAccount(Account account, int id);
+    Account createAccount(Account account, int id);
 
-    List<Account> getAllAccounts(int id);
+    List<Account> fetchAllAccounts(int id);
 
     Account updateAccount(int uid, int id, Account account);
 
