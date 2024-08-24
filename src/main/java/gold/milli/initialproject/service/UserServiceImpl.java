@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(User user, Integer userId) {
-            User oldUser = findUserById(userId);
+    public User updateUser(User user, Integer id) throws Exception{
+            User oldUser = findUserById(id);
             oldUser.setEmail(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
             oldUser.setUsername(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
             return userRepository.save(oldUser);
@@ -42,14 +42,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(int userId) {
-        userRepository.deleteById(userId);
+    public void deleteUser(int id) {
+        userRepository.deleteById(id);
     }
 
     @Override
-    public User findUserById(int userId){
-        Optional<User> userHolder =  userRepository.findById(userId);
-        return userHolder.orElse(null);
+    public User findUserById(int id) throws Exception {
+        Optional<User> userHolder =  userRepository.findById(id);
+        if (userHolder.isPresent())
+            return userHolder.get();
+        else
+            throw new Exception("User not found");
     }
 
 }

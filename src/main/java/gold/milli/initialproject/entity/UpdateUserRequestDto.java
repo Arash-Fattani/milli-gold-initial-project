@@ -6,7 +6,6 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-@ToString
 public class UpdateUserRequestDto {
     @Size(max = 50, message = "Username must be less than 50 characters")
     private String username;

@@ -14,5 +14,5 @@ public interface UserService {
 
     void deleteUser(int userId);
 
-    User findUserById(int userId);
+    User findUserById(int userId) throws Exception;
 }

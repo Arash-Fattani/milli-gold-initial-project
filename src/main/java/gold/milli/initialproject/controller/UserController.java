@@ -4,7 +4,7 @@ import gold.milli.initialproject.entity.CreateUserRequestDto;
 import gold.milli.initialproject.entity.UpdateUserRequestDto;
 import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.entity.UserDto;
-import gold.milli.initialproject.mapper.UserServiceMapper;
+import gold.milli.initialproject.mapper.UserMapper;
 import gold.milli.initialproject.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Tag(name = "User Management", description = "Operations related to user management")
 public class UserController {
     private final UserService userService;
-    private final UserServiceMapper userServiceMapper;
+    private final UserMapper userMapper;
 
     @PostMapping("/user")
     @Operation(
@@ -31,8 +31,8 @@ public class UserController {
             description = "Save a newly registered user"
     )
     public UserDto createUser(@RequestBody @Valid CreateUserRequestDto userRequest) {
-        User user = userServiceMapper.createUserRequestMapper.userFromCreateRequest(userRequest);
-        return userServiceMapper.userResponseMapper.responseFromUser(userService.createUser(user));
+        User user = userMapper.fromCreateToUser(userRequest);
+        return userMapper.toUserDto(userService.createUser(user));
     }
 
     @GetMapping("/users")
@@ -43,12 +43,12 @@ public class UserController {
     public Page<UserDto> fetchAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "userId") String sortBy,
+            @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction
     ){
         Page<User> userPage = userService.fetchAllUsers(page, size, sortBy, direction);
         List<UserDto> userDtoList = userPage.getContent().stream()
-                .map(userServiceMapper.userResponseMapper::responseFromUser)
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
 
         return new PageImpl<>(userDtoList, userPage.getPageable(), userPage.getTotalElements());
@@ -60,8 +60,8 @@ public class UserController {
             description = "update user's username or email"
     )
     public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) throws Exception {
-        User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
-        return userServiceMapper.userResponseMapper.responseFromUser(userService.updateUser(user, userId));
+        User user = userMapper.FromUpdateToUser(updateUserRequestDto);
+        return userMapper.toUserDto(userService.updateUser(user, userId));
     }
 
     @DeleteMapping("/users/{userId}")

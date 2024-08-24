@@ -18,28 +18,28 @@ public class AccountController {
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
-    @PostMapping("/user/{userId}")
-    public Account createAccount(@RequestBody Account account, @PathVariable int userId){
+    @PostMapping("/user/{userId}/account")
+    public Account createAccount(@RequestBody Account account, @PathVariable int userId) throws Exception{
       return accountService.createAccount(account, userId);
     }
     @Operation(
             summary = "get owned account",
             description = "get all of the accounts belonging to a specific user"
     )
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}/accounts")
     public Page<Account> fetchAllAccounts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "accountNumber") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             @PathVariable int userId){
-        return accountService.fetchAllAccounts(userId, page, size, sortBy, direction);
+        return accountService.getUserAccounts(userId, page, size, sortBy, direction);
     }
     @Operation(
             summary = "update account",
             description = "Update Account type and balance"
     )
-    @PutMapping("/user/{userId}/{accountId}")
+    @PutMapping("/user/{userId}/account/{accountId}")
     public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
                                  @RequestBody Account account) throws Exception{
         return accountService.updateAccount(userId, accountId, account);
@@ -48,7 +48,7 @@ public class AccountController {
             summary = "delete an account",
             description = "delete a desired account by account id"
     )
-    @DeleteMapping("/user/{userId}/{accountId}")
+    @DeleteMapping("/user/{userId}/account/{accountId}")
     public void deleteAccount(@PathVariable int userId, @PathVariable int accountId) throws Exception{
         accountService.deleteAccount(userId, accountId);
     }

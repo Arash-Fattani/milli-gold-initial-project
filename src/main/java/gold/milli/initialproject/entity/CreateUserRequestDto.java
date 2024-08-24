@@ -3,11 +3,14 @@ package gold.milli.initialproject.entity;
 import gold.milli.initialproject.entity.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 @Data
 @AllArgsConstructor
-@ToString
 public class CreateUserRequestDto {
     @NotBlank(message = "Username cannot be blank")
     @Size(max = 50, message = "Username must be less than 50 characters")
@@ -22,7 +25,7 @@ public class CreateUserRequestDto {
     @NotEmpty(message = "You must have a role")
     private List<Role> roles;
 
-    public void setPassword(String password) {
-        this.password = DigestUtils.sha256(password).toString();
+    public String getPassword() {
+        return Base64.encodeBase64String( DigestUtils.sha256(this.password));
     }
 }

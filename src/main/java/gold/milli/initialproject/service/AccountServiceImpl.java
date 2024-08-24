@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -20,19 +18,19 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @Override
     @Transactional
-    public Account createAccount(Account account, int userId) {
-        User owner = userServiceImpl.findUserById(userId);
+    public Account createAccount(Account account, int userId) throws Exception{
+        User owner = userService.findUserById(userId);
         account.setOwner(owner);
         owner.addAccount(account);
         return accountRepository.save(account);
     }
 
     @Override
-    public Page<Account> fetchAllAccounts(int userId, int page, int size, String sortBy, String direction) {
+    public Page<Account> getUserAccounts(int userId, int page, int size, String sortBy, String direction) {
         Sort.Direction sortingDirection = Sort.Direction.fromString(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size,Sort.by(sortingDirection, sortBy));
         return accountRepository.findAccountsByOwnerId(userId, pageable);
@@ -41,15 +39,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public Account updateAccount(int userId, int accountId, Account account) throws Exception {
-        User owner = userServiceImpl.findUserById(userId);
-        Account prevAccount = checkAccount(owner, accountId);
+        User owner = userService.findUserById(userId);
+        Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         prevAccount.setAccountType(
                 account.getAccountType() != null ? account.getAccountType() : prevAccount.getAccountType());
         prevAccount.setBalance(account.getBalance());
         return accountRepository.save(prevAccount);
     }
 
-    public Account checkAccount(User owner, Integer accountId) throws Exception {
+    public Account getAccountAndCheckOwnership(User owner, Integer accountId) throws Exception {
         Optional<Account> accountHolder = accountRepository.findById(accountId);
         if (accountHolder.isPresent()) {
             Account account = accountHolder.get();
@@ -64,8 +62,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void deleteAccount(int userId, int accountId) throws Exception {
-        User owner = userServiceImpl.findUserById(userId);
-        Account prevAccount = checkAccount(owner, accountId);
+        User owner = userService.findUserById(userId);
+        Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         if (prevAccount.getOwner() != owner) {
             throw new Exception("this is not your account");
         } else {

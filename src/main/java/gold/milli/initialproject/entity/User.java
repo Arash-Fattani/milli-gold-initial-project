@@ -1,5 +1,6 @@
 package gold.milli.initialproject.entity;
 
+import gold.milli.initialproject.converter.RolesConverter;
 import gold.milli.initialproject.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -25,15 +26,11 @@ public class User {
 
     @Column(unique = true, name = "email")
     private String email;
-    @Singular
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Convert(converter = RolesConverter.class)
+    @Column(name = "roles")
     private List<Role> roles;
 
     @OneToMany(mappedBy = "owner")
-    @JsonIgnore
     private List<Account> accounts;
 
     @Override
@@ -89,6 +86,7 @@ public class User {
     }
 
     public void addAccount(Account account) {
-        this.accounts.add(account);
+        if (account != null)
+            this.accounts.add(account);
     }
 }
