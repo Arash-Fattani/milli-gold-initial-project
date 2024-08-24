@@ -8,7 +8,6 @@
 @Synchronized is used to ensure thread safety
 @slf4j for logging purposes
 @cleanup for streams connections to clean up them after they are no longer needed
-@SneakyThrows is used to catch checked exceptions without the need to declare them
 @Transient for fields that are fields of the class but should not be saved in the database
 @Embedded and @Embeddable abd @SecondaryTable  for composite fields(fields that are not entities but have fields and themselves are a field of an entity) and @Idclass
 @JoinTable is used for many to many relations
@@ -25,5 +24,5 @@ SqlResultSetMapping is used map sql results to desired object
 @Parameter in Hibernate is used to provide configuration options to custom types, allowing them to be more flexible and configurable. for security measures for password
 @Access(AccessType.PROPERTY) if i define getters for authentication and checking input
 you can change your id to access others account
-questions about update method
 better Exception handling
+the request parameter cannot be null

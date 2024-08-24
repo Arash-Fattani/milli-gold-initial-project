@@ -7,12 +7,13 @@ import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "users")
 @EqualsAndHashCode(of = "userId")
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
 //TODO: when the application's data increases use a higher value for allocation size to increase performance
 public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")

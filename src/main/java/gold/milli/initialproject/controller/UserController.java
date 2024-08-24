@@ -27,7 +27,6 @@ public class UserController {
             description = "Save a newly registered user"
     )
     public UserResponseDto createUser(@RequestBody CreateUserRequestDto userRequest) {
-
         User user = userServiceMapper.createUserRequestMapper.userFromCreateRequest(userRequest);
         return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.createUser(user));
     }
@@ -50,6 +49,7 @@ public class UserController {
     public UserResponseDto updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) {
         try {
             User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
+            System.out.println(user);
             return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.updateUser(user, userId));
         } catch (Exception e) {
             System.out.println(e.getMessage());

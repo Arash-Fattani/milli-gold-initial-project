@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.List;
 @Data
 @AllArgsConstructor
+@ToString
 public class CreateUserRequestDto {
 
     private String username;
