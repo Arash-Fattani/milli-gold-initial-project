@@ -1,5 +1,7 @@
 package gold.milli.initialproject.service;
 
+import gold.milli.initialproject.entity.CreateUserRequestDto;
+import gold.milli.initialproject.entity.UpdateUserRequestDto;
 import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,8 +22,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public User createUser(CreateUserRequestDto user)
+    {
+        User newUser = new User(user.getUsername(), user.getPassword(), user.getRoles(), user.getEmail());
+        return userRepository.save(newUser);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(User user, Integer id) throws Exception{
+    public User updateUser(UpdateUserRequestDto user, Integer id) throws Exception{
             User oldUser = findUserById(id);
             oldUser.setEmail(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
             oldUser.setUsername(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());

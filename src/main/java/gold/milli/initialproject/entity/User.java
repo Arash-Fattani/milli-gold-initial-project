@@ -5,6 +5,8 @@ import gold.milli.initialproject.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
 
@@ -89,4 +91,12 @@ public class User {
         if (account != null)
             this.accounts.add(account);
     }
+
+    public User(String username, String password, List<Role> roles, String email) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
 }

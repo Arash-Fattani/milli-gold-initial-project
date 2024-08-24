@@ -4,7 +4,6 @@ import gold.milli.initialproject.entity.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;

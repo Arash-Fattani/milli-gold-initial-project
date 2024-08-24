@@ -31,8 +31,7 @@ public class UserController {
             description = "Save a newly registered user"
     )
     public UserDto createUser(@RequestBody @Valid CreateUserRequestDto userRequest) {
-        User user = userMapper.fromCreateToUser(userRequest);
-        return userMapper.toUserDto(userService.createUser(user));
+        return userMapper.toUserDto(userService.createUser(userRequest));
     }
 
     @GetMapping("/users")
@@ -60,8 +59,7 @@ public class UserController {
             description = "update user's username or email"
     )
     public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) throws Exception {
-        User user = userMapper.FromUpdateToUser(updateUserRequestDto);
-        return userMapper.toUserDto(userService.updateUser(user, userId));
+        return userMapper.toUserDto(userService.updateUser(updateUserRequestDto, userId));
     }
 
     @DeleteMapping("/users/{userId}")

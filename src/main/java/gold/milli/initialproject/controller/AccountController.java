@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user/{userId}/")
 public class AccountController {
     private final AccountService accountService;
 
@@ -18,7 +18,7 @@ public class AccountController {
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
-    @PostMapping("/user/{userId}/account")
+    @PostMapping("account")
     public Account createAccount(@RequestBody Account account, @PathVariable int userId) throws Exception{
       return accountService.createAccount(account, userId);
     }
@@ -26,7 +26,7 @@ public class AccountController {
             summary = "get owned account",
             description = "get all of the accounts belonging to a specific user"
     )
-    @GetMapping("/user/{userId}/accounts")
+    @GetMapping("accounts")
     public Page<Account> fetchAllAccounts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -39,7 +39,7 @@ public class AccountController {
             summary = "update account",
             description = "Update Account type and balance"
     )
-    @PutMapping("/user/{userId}/account/{accountId}")
+    @PutMapping("account/{accountId}")
     public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
                                  @RequestBody Account account) throws Exception{
         return accountService.updateAccount(userId, accountId, account);
@@ -48,7 +48,7 @@ public class AccountController {
             summary = "delete an account",
             description = "delete a desired account by account id"
     )
-    @DeleteMapping("/user/{userId}/account/{accountId}")
+    @DeleteMapping("account/{accountId}")
     public void deleteAccount(@PathVariable int userId, @PathVariable int accountId) throws Exception{
         accountService.deleteAccount(userId, accountId);
     }
