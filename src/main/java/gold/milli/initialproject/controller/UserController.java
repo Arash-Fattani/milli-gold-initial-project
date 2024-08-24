@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +40,18 @@ public class UserController {
             summary = "fetch all users",
             description = "fetch all of the registered users"
     )
-    public List<UserDto> fetchAllUsers() {
-        return userService.fetchAllUsers().stream()
-                .map(userServiceMapper.userResponseMapper::responseFromUser).collect(Collectors.toList());
+    public Page<UserDto> fetchAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "userId") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Page<User> userPage = userService.fetchAllUsers(page, size, sortBy, direction);
+        List<UserDto> userDtoList = userPage.getContent().stream()
+                .map(userServiceMapper.userResponseMapper::responseFromUser)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(userDtoList, userPage.getPageable(), userPage.getTotalElements());
     }
 
     @PutMapping("/users/{userId}")
@@ -48,15 +59,9 @@ public class UserController {
             summary = "update a user",
             description = "update user's username or email"
     )
-    public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) {
-        try {
-            User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
-            System.out.println(user);
-            return userServiceMapper.userResponseMapper.responseFromUser(userService.updateUser(user, userId));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+    public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) throws Exception {
+        User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
+        return userServiceMapper.userResponseMapper.responseFromUser(userService.updateUser(user, userId));
     }
 
     @DeleteMapping("/users/{userId}")

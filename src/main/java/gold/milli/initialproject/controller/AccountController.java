@@ -4,9 +4,9 @@ import gold.milli.initialproject.entity.Account;
 import gold.milli.initialproject.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,8 +27,13 @@ public class AccountController {
             description = "get all of the accounts belonging to a specific user"
     )
     @GetMapping("/user/{userId}")
-    public List<Account> fetchAllAccounts(@PathVariable int userId){
-        return accountService.fetchAllAccounts(userId);
+    public Page<Account> fetchAllAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "accountNumber") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            @PathVariable int userId){
+        return accountService.fetchAllAccounts(userId, page, size, sortBy, direction);
     }
     @Operation(
             summary = "update account",

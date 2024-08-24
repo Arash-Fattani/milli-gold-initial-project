@@ -5,9 +5,14 @@ import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -27,8 +32,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> fetchAllAccounts(int userId) {
-        return accountRepository.findAccountsByOwnerUserId(userId);
+    public Page<Account> fetchAllAccounts(int userId, int page, int size, String sortBy, String direction) {
+        Sort.Direction sortingDirection = Sort.Direction.fromString(direction.toUpperCase());
+        Pageable pageable = PageRequest.of(page, size,Sort.by(sortingDirection, sortBy));
+        return accountRepository.findAccountsByOwnerId(userId, pageable);
     }
 
     @Override

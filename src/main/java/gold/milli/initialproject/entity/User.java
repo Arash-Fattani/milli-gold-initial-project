@@ -9,30 +9,22 @@ import java.util.List;
 
 @AllArgsConstructor
 @Entity(name = "users")
-@EqualsAndHashCode(of = "userId")
-@Getter
-@Setter
-@ToString
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 //TODO: when the application's data increases use a higher value for allocation size to increase performance
 public class User {
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name= "user_seq", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+    @SequenceGenerator(name = "user_id_seq", allocationSize = 1)
     @Id
-    private int userId;
-
-    @NonNull
-    @Column(unique = true)
+    @Column(name = "user_id")
+    private Integer id;
+    @Column(unique = true, name = "username")
     private String username;
-
-    @NonNull
-    @Getter(AccessLevel.NONE)
+    @Column(name = "hashed_password")
     private String password;
 
-    @NonNull
-    @Column(unique = true)
+    @Column(unique = true, name = "email")
     private String email;
-    @NonNull
     @Singular
     @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -42,10 +34,61 @@ public class User {
 
     @OneToMany(mappedBy = "owner")
     @JsonIgnore
-    private List<Account>accounts;
+    private List<Account> accounts;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                ", accounts=" + accounts +
+                '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
 
-    public void addAccount(Account account){
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void addAccount(Account account) {
         this.accounts.add(account);
     }
 }
