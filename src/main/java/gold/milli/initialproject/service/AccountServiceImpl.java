@@ -5,64 +5,81 @@ import gold.milli.initialproject.entity.User;
 import gold.milli.initialproject.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountServiceInterface {
 
     private final AccountRepository accountRepository;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @Override
     @Transactional
-    public Account createAccount(Account account, int userId) {
-        User owner = userServiceImpl.findUserById(userId);
-        account.setOwner(owner);
+    public Account saveAccount(Account account, int id, User owner) {
         owner.addAccount(account);
+        System.out.println("##########################" + account.getMoney());
         return accountRepository.save(account);
     }
 
     @Override
-    public List<Account> fetchAllAccounts(int userId) {
-        return accountRepository.findAccountsByOwnerUserId(userId);
+    public List<Account> getAllAccounts(int id) {
+        return accountRepository.findAccountsByOwnerUserId(id);
     }
 
     @Override
-    @Transactional
-    public Account updateAccount(int userId, int accountId, Account account) throws Exception {
-        User owner = userServiceImpl.findUserById(userId);
-        Account prevAccount = checkAccount(owner, accountId);
-        prevAccount.setAccountType(
-                account.getAccountType() != null ? account.getAccountType() : prevAccount.getAccountType());
-        prevAccount.setBalance(account.getBalance());
-        return accountRepository.save(prevAccount);
-    }
-
-    public Account checkAccount(User owner, Integer accountId) throws Exception {
-        Optional<Account> accountHolder = accountRepository.findById(accountId);
-        if (accountHolder.isPresent()) {
-            Account account = accountHolder.get();
-            if (account.getOwner() != owner) {
+    @SneakyThrows
+    public Account updateAccount(int uid, int id, Account account) {
+        User owner = userService.findUserById(uid);
+        Optional<Account> accountHolder = accountRepository.findById(id);
+        if (accountHolder.isPresent()){
+            Account prevAccount = accountHolder.get();
+            if (prevAccount.getOwner() != owner){
                 throw new Exception("this is not your account");
             }
-            return account;
-        } else
-            throw new Exception("This account is not registered");
+            Account newAccount = prevAccount.toBuilder().
+                    accountType(account.getAccountType()).
+                    money(account.getMoney()).
+                    build();
+            return accountRepository.save(newAccount);
+        }
+        throw new Exception("This account is not registered");
     }
 
     @Override
-    @Transactional
-    public void deleteAccount(int userId, int accountId) throws Exception {
-        User owner = userServiceImpl.findUserById(userId);
-        Account prevAccount = checkAccount(owner, accountId);
-        if (prevAccount.getOwner() != owner) {
-            throw new Exception("this is not your account");
-        } else {
-            accountRepository.deleteById(accountId);
+    @SneakyThrows
+    public void deleteAccount(int uid, int id) {
+        User owner = userService.findUserById(uid);
+        Optional<Account> accountHolder = accountRepository.findById(id);
+        if (accountHolder.isPresent()){
+            Account prevAccount = accountHolder.get();
+            if (prevAccount.getOwner() != owner){
+                throw new Exception("this is not your account");
+            }else {
+                accountRepository.deleteById(id);
+            }
+        }else
+            throw new Exception("This account is not registered");
+    }
+    public String generateAccountNumber(){
+        Random random  = new SecureRandom();
+        StringBuilder accountNumber = new StringBuilder();
+        int accountNumberLength = 10;
+        while (true) {
+            for (int i = 0; i < accountNumberLength; i++) {
+                accountNumber.append(random.nextInt(10));
+            }
+            if (!accountRepository.existsAccountByAccountNumber(accountNumber.toString()))
+                break;
+            else
+                accountNumber.delete(0, 10);
         }
+        return accountNumber.toString();
     }
 }
