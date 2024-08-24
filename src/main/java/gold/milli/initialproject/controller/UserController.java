@@ -1,35 +1,34 @@
 package gold.milli.initialproject.controller;
 
+import gold.milli.initialproject.entity.CreateUserRequestDto;
+import gold.milli.initialproject.entity.UpdateUserRequestDto;
 import gold.milli.initialproject.entity.User;
-import gold.milli.initialproject.entity.UserDTOCreate;
-import gold.milli.initialproject.entity.UserDTOUpdate;
-import gold.milli.initialproject.mapper.UserCreateMapper;
-import gold.milli.initialproject.mapper.UserUpdateMapper;
-import gold.milli.initialproject.service.UserService;
+import gold.milli.initialproject.entity.UserResponseDto;
+import gold.milli.initialproject.mapper.UserServiceMapper;
+import gold.milli.initialproject.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User Management", description = "Operations related to user management")
 public class UserController {
-    private final UserService userService;
-    private final UserCreateMapper userMapper;
-    private final UserUpdateMapper userUpdateMapper;
+    private final UserServiceImpl userServiceImpl;
+    private final UserServiceMapper userServiceMapper;
 
-    @PostMapping("/users/create")
+    @PostMapping("/user")
     @Operation(
             summary = "create a user",
             description = "Save a newly registered user"
     )
-    public UserDTOCreate saveUser(@RequestBody UserDTOCreate userRequest) {
-
-        User user = this.userMapper.UserCreateFromRequest(userRequest);
-        return this.userMapper.UserDTOCreateFromUser(userService.saveUser(user));
+    public UserResponseDto createUser(@RequestBody CreateUserRequestDto userRequest) {
+        User user = userServiceMapper.createUserRequestMapper.userFromCreateRequest(userRequest);
+        return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.createUser(user));
     }
 
     @GetMapping("/users")
@@ -37,32 +36,33 @@ public class UserController {
             summary = "fetch all users",
             description = "fetch all of the registered users"
     )
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<UserResponseDto> fetchAllUsers() {
+        return userServiceImpl.fetchAllUsers().stream()
+                .map(userServiceMapper.userResponseMapper::responseFromUser).collect(Collectors.toList());
     }
 
-    @PutMapping("/users/{id}/profile")
+    @PutMapping("/users/{userId}")
     @Operation(
             summary = "update a user",
             description = "update user's username or email"
     )
-    public UserDTOUpdate updateUser(@RequestBody UserDTOUpdate userDTOUpdate, @PathVariable Integer id) {
+    public UserResponseDto updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) {
         try {
-            User user = this.userMapper.UserCreateFromRequest(this.userUpdateMapper.UserUpdateFromRequest(userDTOUpdate));
-            return this.userUpdateMapper.UserDTOUpdateFromUser(
-                    this.userMapper.UserDTOCreateFromUser(userService.updateUser(user, id)));
+            User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
+            System.out.println(user);
+            return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.updateUser(user, userId));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
 
-    @DeleteMapping("/users/{id}/delete")
+    @DeleteMapping("/users/{userId}")
     @Operation(
             summary = "delete a user",
             description = "delete a user by their unique id"
     )
-    public void deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable int userId) {
+        userServiceImpl.deleteUser(userId);
     }
 }

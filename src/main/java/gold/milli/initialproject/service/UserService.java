@@ -1,60 +1,17 @@
 package gold.milli.initialproject.service;
 
 import gold.milli.initialproject.entity.User;
-import gold.milli.initialproject.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-public class UserService implements UserServiceInterface {
-    private final UserRepository userRepository;
+public interface UserService {
+    User createUser(User user);
 
-    @Override
-    @Transactional
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
+    List<User> fetchAllUsers();
 
-    @Override
-    @Transactional
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
+    User updateUser(User user, Integer userId) throws Exception;
 
-    @Override
-    @SneakyThrows
-    @Transactional
-    public User updateUser(User user, Integer id) {
-        Optional<User> userHolder = userRepository.findById(id);
-        if (userHolder.isPresent()) {
-            User oldUser = userHolder.get();
-            User updatedUser = oldUser.toBuilder()
-                    .email(user.getEmail() != null ? user.getEmail() : oldUser.getEmail())
-                    .username(user.getUsername() != null ? user.getUsername() : oldUser.getUsername())
-                    .build();
-            return userRepository.save(updatedUser);
+    void deleteUser(int userId);
 
-        }
-        throw new Exception("User Not Found");
-    }
-
-    @Override
-    @Transactional
-    public void deleteUser(int id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public User findUserById(int id){
-        Optional<User> userHolder =  userRepository.findById(id);
-        return userHolder.orElse(null);
-    }
-
+    User findUserById(int userId);
 }

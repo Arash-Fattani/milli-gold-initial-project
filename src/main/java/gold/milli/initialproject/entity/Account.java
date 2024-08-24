@@ -4,23 +4,26 @@ import gold.milli.initialproject.entity.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "Accounts")
-@Data
-@Builder(toBuilder = true)
+import java.math.BigDecimal;
+
+@Entity(name = "accounts")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "accountId")
+@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     @SequenceGenerator(name = "account_seq", allocationSize = 1)
-    private int accountId;
+    private int id;
 
     @NonNull
     @Column(unique = true)
+    @Setter(AccessLevel.NONE)
     private String accountNumber;
     @NonNull
-    private Double money;
+    private BigDecimal balance;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
