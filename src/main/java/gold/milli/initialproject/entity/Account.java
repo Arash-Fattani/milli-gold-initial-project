@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter
+//TODO: add validation to account DTOs
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")

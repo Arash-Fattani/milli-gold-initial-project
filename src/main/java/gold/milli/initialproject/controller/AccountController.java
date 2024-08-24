@@ -1,7 +1,7 @@
 package gold.milli.initialproject.controller;
 
 import gold.milli.initialproject.entity.Account;
-import gold.milli.initialproject.service.AccountServiceImpl;
+import gold.milli.initialproject.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +10,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class AccountController {
-    private final AccountServiceImpl accountServiceImpl;
+    private final AccountService accountService;
 
     @Operation(
             summary = "create a new Account",
@@ -19,7 +20,7 @@ public class AccountController {
     )
     @PostMapping("/user/{userId}")
     public Account createAccount(@RequestBody Account account, @PathVariable int userId){
-      return accountServiceImpl.createAccount(account, userId);
+      return accountService.createAccount(account, userId);
     }
     @Operation(
             summary = "get owned account",
@@ -27,7 +28,7 @@ public class AccountController {
     )
     @GetMapping("/user/{userId}")
     public List<Account> fetchAllAccounts(@PathVariable int userId){
-        return accountServiceImpl.fetchAllAccounts(userId);
+        return accountService.fetchAllAccounts(userId);
     }
     @Operation(
             summary = "update account",
@@ -36,7 +37,7 @@ public class AccountController {
     @PutMapping("/user/{userId}/{accountId}")
     public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
                                  @RequestBody Account account) throws Exception{
-        return accountServiceImpl.updateAccount(userId, accountId, account);
+        return accountService.updateAccount(userId, accountId, account);
     }
     @Operation(
             summary = "delete an account",
@@ -44,6 +45,6 @@ public class AccountController {
     )
     @DeleteMapping("/user/{userId}/{accountId}")
     public void deleteAccount(@PathVariable int userId, @PathVariable int accountId) throws Exception{
-        accountServiceImpl.deleteAccount(userId, accountId);
+        accountService.deleteAccount(userId, accountId);
     }
 }

@@ -3,11 +3,12 @@ package gold.milli.initialproject.controller;
 import gold.milli.initialproject.entity.CreateUserRequestDto;
 import gold.milli.initialproject.entity.UpdateUserRequestDto;
 import gold.milli.initialproject.entity.User;
-import gold.milli.initialproject.entity.UserResponseDto;
+import gold.milli.initialproject.entity.UserDto;
 import gold.milli.initialproject.mapper.UserServiceMapper;
-import gold.milli.initialproject.service.UserServiceImpl;
+import gold.milli.initialproject.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +17,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 @Tag(name = "User Management", description = "Operations related to user management")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private final UserServiceMapper userServiceMapper;
 
     @PostMapping("/user")
@@ -26,9 +28,9 @@ public class UserController {
             summary = "create a user",
             description = "Save a newly registered user"
     )
-    public UserResponseDto createUser(@RequestBody CreateUserRequestDto userRequest) {
+    public UserDto createUser(@RequestBody @Valid CreateUserRequestDto userRequest) {
         User user = userServiceMapper.createUserRequestMapper.userFromCreateRequest(userRequest);
-        return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.createUser(user));
+        return userServiceMapper.userResponseMapper.responseFromUser(userService.createUser(user));
     }
 
     @GetMapping("/users")
@@ -36,8 +38,8 @@ public class UserController {
             summary = "fetch all users",
             description = "fetch all of the registered users"
     )
-    public List<UserResponseDto> fetchAllUsers() {
-        return userServiceImpl.fetchAllUsers().stream()
+    public List<UserDto> fetchAllUsers() {
+        return userService.fetchAllUsers().stream()
                 .map(userServiceMapper.userResponseMapper::responseFromUser).collect(Collectors.toList());
     }
 
@@ -46,11 +48,11 @@ public class UserController {
             summary = "update a user",
             description = "update user's username or email"
     )
-    public UserResponseDto updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) {
+    public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) {
         try {
             User user = userServiceMapper.updateUserRequestMapper.userFromUpdateRequest(updateUserRequestDto);
             System.out.println(user);
-            return userServiceMapper.userResponseMapper.responseFromUser(userServiceImpl.updateUser(user, userId));
+            return userServiceMapper.userResponseMapper.responseFromUser(userService.updateUser(user, userId));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -63,6 +65,6 @@ public class UserController {
             description = "delete a user by their unique id"
     )
     public void deleteUser(@PathVariable int userId) {
-        userServiceImpl.deleteUser(userId);
+        userService.deleteUser(userId);
     }
 }
