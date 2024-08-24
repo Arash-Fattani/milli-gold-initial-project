@@ -33,35 +33,36 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account updateAccount(int userId, int accountId, Account account)throws Exception {
+    public Account updateAccount(int userId, int accountId, Account account) throws Exception {
         User owner = userServiceImpl.findUserById(userId);
+        Account prevAccount = checkAccount(owner, accountId);
+        prevAccount.setAccountType(
+                account.getAccountType() != null ? account.getAccountType() : prevAccount.getAccountType());
+        prevAccount.setBalance(account.getBalance());
+        return accountRepository.save(prevAccount);
+    }
+
+    public Account checkAccount(User owner, Integer accountId) throws Exception {
         Optional<Account> accountHolder = accountRepository.findById(accountId);
-        if (accountHolder.isPresent()){
-            Account prevAccount = accountHolder.get();
-            if (prevAccount.getOwner() != owner){
+        if (accountHolder.isPresent()) {
+            Account account = accountHolder.get();
+            if (account.getOwner() != owner) {
                 throw new Exception("this is not your account");
             }
-            prevAccount.setAccountType(
-                    account.getAccountType()!= null ? account.getAccountType() : prevAccount.getAccountType());
-            prevAccount.setBalance(account.getBalance());
-            return accountRepository.save(prevAccount);
-        }
-        throw new Exception("This account is not registered");
+            return account;
+        } else
+            throw new Exception("This account is not registered");
     }
 
     @Override
     @Transactional
-    public void deleteAccount(int userId, int accountId) throws Exception{
+    public void deleteAccount(int userId, int accountId) throws Exception {
         User owner = userServiceImpl.findUserById(userId);
-        Optional<Account> accountHolder = accountRepository.findById(accountId);
-        if (accountHolder.isPresent()){
-            Account prevAccount = accountHolder.get();
-            if (prevAccount.getOwner() != owner){
-                throw new Exception("this is not your account");
-            }else {
-                accountRepository.deleteById(accountId);
-            }
-        }else
-            throw new Exception("This account is not registered");
+        Account prevAccount = checkAccount(owner, accountId);
+        if (prevAccount.getOwner() != owner) {
+            throw new Exception("this is not your account");
+        } else {
+            accountRepository.deleteById(accountId);
+        }
     }
 }

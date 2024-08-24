@@ -27,16 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(User user, Integer userId) throws Exception{
-        Optional<User> userHolder = userRepository.findById(userId);
-        if (userHolder.isPresent()) {
-            User oldUser = userHolder.get();
+    public User updateUser(User user, Integer userId) {
+            User oldUser = findUserById(userId);
             oldUser.setEmail(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
             oldUser.setUsername(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
             return userRepository.save(oldUser);
-
-        }
-        throw new Exception("User Not Found");
     }
 
     @Override

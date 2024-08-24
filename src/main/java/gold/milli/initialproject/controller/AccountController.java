@@ -17,23 +17,23 @@ public class AccountController {
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
-    @PostMapping("/user/{accountId}/create-account")
-    public Account createAccount(@RequestBody Account account, @PathVariable int accountId){
-      return accountServiceImpl.createAccount(account, accountId);
+    @PostMapping("/user/{userId}")
+    public Account createAccount(@RequestBody Account account, @PathVariable int userId){
+      return accountServiceImpl.createAccount(account, userId);
     }
     @Operation(
             summary = "get owned account",
             description = "get all of the accounts belonging to a specific user"
     )
-    @GetMapping("/user/{accountId}/accounts")
-    public List<Account> fetchAllAccounts(@PathVariable int accountId){
-        return accountServiceImpl.fetchAllAccounts(accountId);
+    @GetMapping("/user/{userId}")
+    public List<Account> fetchAllAccounts(@PathVariable int userId){
+        return accountServiceImpl.fetchAllAccounts(userId);
     }
     @Operation(
             summary = "update account",
             description = "Update Account type and balance"
     )
-    @PutMapping("/user/{userId}/account/{accountId}/update-account")
+    @PutMapping("/user/{userId}/{accountId}")
     public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
                                  @RequestBody Account account) throws Exception{
         return accountServiceImpl.updateAccount(userId, accountId, account);
@@ -42,8 +42,8 @@ public class AccountController {
             summary = "delete an account",
             description = "delete a desired account by account id"
     )
-    @DeleteMapping("/user/{userId}/account/{id}/delete")
-    public void deleteAccount(@PathVariable int userId, @PathVariable int id) throws Exception{
-        accountServiceImpl.deleteAccount(userId, id);
+    @DeleteMapping("/user/{userId}/{accountId}")
+    public void deleteAccount(@PathVariable int userId, @PathVariable int accountId) throws Exception{
+        accountServiceImpl.deleteAccount(userId, accountId);
     }
 }

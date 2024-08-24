@@ -21,7 +21,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final UserServiceMapper userServiceMapper;
 
-    @PostMapping("/users/create")
+    @PostMapping("/user")
     @Operation(
             summary = "create a user",
             description = "Save a newly registered user"
@@ -42,7 +42,7 @@ public class UserController {
                 .map(userServiceMapper.userResponseMapper::responseFromUser).collect(Collectors.toList());
     }
 
-    @PutMapping("/users/{userId}/update")
+    @PutMapping("/users/{userId}")
     @Operation(
             summary = "update a user",
             description = "update user's username or email"
@@ -57,7 +57,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{userId}/delete")
+    @DeleteMapping("/users/{userId}")
     @Operation(
             summary = "delete a user",
             description = "delete a user by their unique id"
