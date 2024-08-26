@@ -64,10 +64,6 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(int userId, int accountId) throws Exception {
         User owner = userService.findUserById(userId);
         Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
-        if (prevAccount.getOwner() != owner) {
-            throw new Exception("this is not your account");
-        } else {
-            accountRepository.deleteById(accountId);
-        }
+        accountRepository.deleteById(prevAccount.getId());
     }
 }
