@@ -76,4 +76,11 @@ public class Account {
                 ", accountType=" + accountType +
                 '}';
     }
+
+    public Account(String accountNumber, BigDecimal balance, AccountType accountType, User owner) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.accountType = accountType;
+        this.owner = owner;
+    }
 }

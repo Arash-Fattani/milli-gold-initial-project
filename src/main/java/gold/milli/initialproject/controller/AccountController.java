@@ -1,11 +1,18 @@
 package gold.milli.initialproject.controller;
 
 import gold.milli.initialproject.entity.Account;
+import gold.milli.initialproject.entity.AccountDto;
+import gold.milli.initialproject.entity.CreateAccountRequestDto;
+import gold.milli.initialproject.mapper.AccountMapper;
 import gold.milli.initialproject.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -13,27 +20,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user/{userId}/")
 public class AccountController {
     private final AccountService accountService;
-
+    private final AccountMapper accountMapper;
     @Operation(
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
     @PostMapping("account")
-    public Account createAccount(@RequestBody Account account, @PathVariable Integer userId) throws Exception{
-      return accountService.createAccount(account, userId);
+    public AccountDto createAccount(@RequestBody CreateAccountRequestDto account, @PathVariable Integer userId) throws Exception{
+      return accountMapper.toAccountDto( accountService.createAccount(account, userId));
     }
     @Operation(
             summary = "get owned account",
             description = "get all of the accounts belonging to a specific user"
     )
     @GetMapping("accounts")
-    public Page<Account> fetchAllAccounts(
+    public Page<AccountDto> fetchAllAccounts(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "accountNumber") String sortBy,
+            @RequestParam(defaultValue = "balance") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             @PathVariable Integer userId){
-        return accountService.getUserAccounts(userId, page, size, sortBy, direction);
+        Page<Account> accountPage =  accountService.getUserAccounts(userId, page, size, sortBy, direction);
+        List<AccountDto> accountDtoList = accountPage.getContent().stream()
+                .map(accountMapper::toAccountDto).collect(Collectors.toList());
+        return new PageImpl<>(accountDtoList, accountPage.getPageable(), accountPage.getTotalElements());
     }
     @Operation(
             summary = "update account",
