@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface AccountService {
-    Account createAccount(Account account, int userId) throws Exception;
+    Account createAccount(Account account, Integer userId) throws Exception;
 
-    Page<Account> getUserAccounts(int userId, int page, int size, String sortBy, String direction);
+    Page<Account> getUserAccounts(Integer userId, Integer page, Integer size, String sortBy, String direction);
 
-    Account updateAccount(int userId, int accountId, Account account) throws Exception;
+    Account updateAccount(Integer userId, Integer accountId, Account account) throws Exception;
 
-    void deleteAccount(int userId, int accountId) throws Exception;
+    void deleteAccount(Integer userId, Integer accountId) throws Exception;
 }

@@ -19,7 +19,7 @@ public class AccountController {
             description = "create a new account for a logged in account"
     )
     @PostMapping("account")
-    public Account createAccount(@RequestBody Account account, @PathVariable int userId) throws Exception{
+    public Account createAccount(@RequestBody Account account, @PathVariable Integer userId) throws Exception{
       return accountService.createAccount(account, userId);
     }
     @Operation(
@@ -28,11 +28,11 @@ public class AccountController {
     )
     @GetMapping("accounts")
     public Page<Account> fetchAllAccounts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "accountNumber") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
-            @PathVariable int userId){
+            @PathVariable Integer userId){
         return accountService.getUserAccounts(userId, page, size, sortBy, direction);
     }
     @Operation(
@@ -40,7 +40,7 @@ public class AccountController {
             description = "Update Account type and balance"
     )
     @PutMapping("account/{accountId}")
-    public Account updateAccount(@PathVariable int userId, @PathVariable int accountId,
+    public Account updateAccount(@PathVariable Integer userId, @PathVariable Integer accountId,
                                  @RequestBody Account account) throws Exception{
         return accountService.updateAccount(userId, accountId, account);
     }
@@ -49,7 +49,7 @@ public class AccountController {
             description = "delete a desired account by account id"
     )
     @DeleteMapping("account/{accountId}")
-    public void deleteAccount(@PathVariable int userId, @PathVariable int accountId) throws Exception{
+    public void deleteAccount(@PathVariable Integer userId, @PathVariable Integer accountId) throws Exception{
         accountService.deleteAccount(userId, accountId);
     }
 }

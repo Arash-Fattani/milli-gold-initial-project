@@ -40,8 +40,8 @@ public class UserController {
             description = "fetch all of the registered users"
     )
     public Page<UserDto> fetchAllUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction
     ){
@@ -67,7 +67,7 @@ public class UserController {
             summary = "delete a user",
             description = "delete a user by their unique id"
     )
-    public void deleteUser(@PathVariable int userId) {
+    public void deleteUser(@PathVariable Integer userId) {
         userService.deleteUser(userId);
     }
 }

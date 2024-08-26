@@ -10,11 +10,11 @@ import java.util.List;
 public interface UserService {
     User createUser(CreateUserRequestDto user);
 
-    Page<User> fetchAllUsers(int page, int size, String sortBy, String direction);
+    Page<User> fetchAllUsers(Integer page, Integer size, String sortBy, String direction);
 
     User updateUser(UpdateUserRequestDto user, Integer userId) throws Exception;
 
-    void deleteUser(int userId);
+    void deleteUser(Integer userId);
 
-    User findUserById(int userId) throws Exception;
+    User findUserById(Integer userId) throws Exception;
 }

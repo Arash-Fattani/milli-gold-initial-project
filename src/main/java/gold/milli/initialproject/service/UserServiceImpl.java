@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> fetchAllUsers(int page, int size, String sortBy, String direction) {
+    public Page<User> fetchAllUsers(Integer page, Integer size, String sortBy, String direction) {
         Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
         return userRepository.findAll(pageable);
@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(int id) {
+    public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public User findUserById(int id) throws Exception {
+    public User findUserById(Integer id) throws Exception {
         Optional<User> userHolder =  userRepository.findById(id);
         if (userHolder.isPresent())
             return userHolder.get();

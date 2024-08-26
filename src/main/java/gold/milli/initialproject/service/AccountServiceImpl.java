@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account createAccount(Account account, int userId) throws Exception{
+    public Account createAccount(Account account, Integer userId) throws Exception{
         User owner = userService.findUserById(userId);
         account.setOwner(owner);
         owner.addAccount(account);
@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<Account> getUserAccounts(int userId, int page, int size, String sortBy, String direction) {
+    public Page<Account> getUserAccounts(Integer userId, Integer page, Integer size, String sortBy, String direction) {
         Sort.Direction sortingDirection = Sort.Direction.fromString(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size,Sort.by(sortingDirection, sortBy));
         return accountRepository.findAccountsByOwnerId(userId, pageable);
@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account updateAccount(int userId, int accountId, Account account) throws Exception {
+    public Account updateAccount(Integer userId, Integer accountId, Account account) throws Exception {
         User owner = userService.findUserById(userId);
         Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         prevAccount.setAccountType(
@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void deleteAccount(int userId, int accountId) throws Exception {
+    public void deleteAccount(Integer userId, Integer accountId) throws Exception {
         User owner = userService.findUserById(userId);
         Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         accountRepository.deleteById(prevAccount.getId());
