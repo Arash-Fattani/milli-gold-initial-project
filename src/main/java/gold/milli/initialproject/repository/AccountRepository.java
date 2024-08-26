@@ -12,5 +12,4 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Page<Account> findAccountsByOwnerId(Long id, Pageable pageable);
     boolean existsAccountByAccountNumber(String accountNumber);
-
 }
