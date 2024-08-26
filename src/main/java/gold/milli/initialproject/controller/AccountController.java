@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@RequestMapping("/api/v1/user/{userId}/accounts")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user/{userId}/")
 public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
@@ -25,7 +25,7 @@ public class AccountController {
             summary = "create a new Account",
             description = "create a new account for a logged in account"
     )
-    @PostMapping("account")
+    @PostMapping
     public AccountDto createAccount(@RequestBody CreateAccountRequestDto account, @PathVariable Integer userId) throws Exception{
       return accountMapper.toAccountDto( accountService.createAccount(account, userId));
     }
@@ -33,7 +33,7 @@ public class AccountController {
             summary = "get owned account",
             description = "get all of the accounts belonging to a specific user"
     )
-    @GetMapping("accounts")
+    @GetMapping
     public Page<AccountDto> fetchAllAccounts(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -49,7 +49,7 @@ public class AccountController {
             summary = "update account",
             description = "Update Account type and balance"
     )
-    @PutMapping("account/{accountId}")
+    @PutMapping("{accountId}")
     public Account updateAccount(@PathVariable Integer userId, @PathVariable Integer accountId,
                                  @RequestBody Account account) throws Exception{
         return accountService.updateAccount(userId, accountId, account);
@@ -58,7 +58,7 @@ public class AccountController {
             summary = "delete an account",
             description = "delete a desired account by account id"
     )
-    @DeleteMapping("account/{accountId}")
+    @DeleteMapping("{accountId}")
     public void deleteAccount(@PathVariable Integer userId, @PathVariable Integer accountId) throws Exception{
         accountService.deleteAccount(userId, accountId);
     }
