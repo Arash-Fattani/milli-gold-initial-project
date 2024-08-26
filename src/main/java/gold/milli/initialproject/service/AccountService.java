@@ -5,11 +5,11 @@ import gold.milli.initialproject.entity.CreateAccountRequestDto;
 import org.springframework.data.domain.Page;
 
 public interface AccountService {
-    Account createAccount(CreateAccountRequestDto account, Integer userId) throws Exception;
+    Account createAccount(CreateAccountRequestDto account, Long userId) throws Exception;
 
-    Page<Account> getUserAccounts(Integer userId, Integer page, Integer size, String sortBy, String direction);
+    Page<Account> getUserAccounts(Long userId, Integer page, Integer size, String sortBy, String direction);
 
-    Account updateAccount(Integer userId, Integer accountId, Account account) throws Exception;
+    Account updateAccount(Long userId, Long accountId, Account account) throws Exception;
 
-    void deleteAccount(Integer userId, Integer accountId) throws Exception;
+    void deleteAccount(Long userId, Long accountId) throws Exception;
 }

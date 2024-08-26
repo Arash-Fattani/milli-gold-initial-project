@@ -6,6 +6,7 @@ import gold.milli.initialproject.entity.CreateAccountRequestDto;
 import gold.milli.initialproject.mapper.AccountMapper;
 import gold.milli.initialproject.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,7 +27,7 @@ public class AccountController {
             description = "create a new account for a logged in account"
     )
     @PostMapping
-    public AccountDto createAccount(@RequestBody CreateAccountRequestDto account, @PathVariable Integer userId) throws Exception{
+    public AccountDto createAccount(@RequestBody @Valid CreateAccountRequestDto account, @PathVariable Long userId) throws Exception{
       return accountMapper.toAccountDto( accountService.createAccount(account, userId));
     }
     @Operation(
@@ -39,7 +40,7 @@ public class AccountController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "balance") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
-            @PathVariable Integer userId){
+            @PathVariable Long userId){
         Page<Account> accountPage =  accountService.getUserAccounts(userId, page, size, sortBy, direction);
         List<AccountDto> accountDtoList = accountPage.getContent().stream()
                 .map(accountMapper::toAccountDto).collect(Collectors.toList());
@@ -50,7 +51,7 @@ public class AccountController {
             description = "Update Account type and balance"
     )
     @PutMapping("{accountId}")
-    public Account updateAccount(@PathVariable Integer userId, @PathVariable Integer accountId,
+    public Account updateAccount(@PathVariable Long userId, @PathVariable Long accountId,
                                  @RequestBody Account account) throws Exception{
         return accountService.updateAccount(userId, accountId, account);
     }
@@ -59,7 +60,7 @@ public class AccountController {
             description = "delete a desired account by account id"
     )
     @DeleteMapping("{accountId}")
-    public void deleteAccount(@PathVariable Integer userId, @PathVariable Integer accountId) throws Exception{
+    public void deleteAccount(@PathVariable Long userId, @PathVariable Long accountId) throws Exception{
         accountService.deleteAccount(userId, accountId);
     }
 }

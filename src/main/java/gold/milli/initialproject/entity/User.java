@@ -20,7 +20,7 @@ public class User {
     @SequenceGenerator(name = "user_id_seq", allocationSize = 1)
     @Id
     @Column(name = "user_id")
-    private Integer id;
+    private Long id;
     @Column(unique = true, name = "username")
     private String username;
     @Column(name = "hashed_password")
@@ -47,7 +47,7 @@ public class User {
                 '}';
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

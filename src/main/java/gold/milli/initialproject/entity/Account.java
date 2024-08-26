@@ -16,7 +16,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_id_seq")
     @SequenceGenerator(name = "account_id_seq", allocationSize = 1)
     @Column(name = "account_id")
-    private Integer id;
+    private Long id;
 
     @Column(unique = true, name = "number")
     private String accountNumber;
@@ -30,7 +30,7 @@ public class Account {
     @Column(name = "type")
     AccountType accountType;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

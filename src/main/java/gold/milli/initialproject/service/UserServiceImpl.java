@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUser(UpdateUserRequestDto user, Integer id) throws Exception{
+    public User updateUser(UpdateUserRequestDto user, Long id) throws Exception{
             User oldUser = findUserById(id);
             oldUser.setEmail(user.getEmail() != null ? user.getEmail() : oldUser.getEmail());
             oldUser.setUsername(user.getUsername() != null ? user.getUsername() : oldUser.getUsername());
@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public User findUserById(Integer id) throws Exception {
+    public User findUserById(Long id) throws Exception {
         Optional<User> userHolder =  userRepository.findById(id);
         if (userHolder.isPresent())
             return userHolder.get();

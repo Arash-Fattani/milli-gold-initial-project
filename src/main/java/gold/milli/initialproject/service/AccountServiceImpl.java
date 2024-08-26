@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account createAccount(CreateAccountRequestDto accountRequest, Integer userId) throws Exception{
+    public Account createAccount(CreateAccountRequestDto accountRequest, Long userId) throws Exception{
         User owner = userService.findUserById(userId);
         Account account = new Account(generateAccountNumber(), accountRequest.getBalance(),
                 accountRequest.getAccountType(), owner);
@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<Account> getUserAccounts(Integer userId, Integer page, Integer size, String sortBy, String direction) {
+    public Page<Account> getUserAccounts(Long userId, Integer page, Integer size, String sortBy, String direction) {
         Sort.Direction sortingDirection = Sort.Direction.fromString(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size,Sort.by(sortingDirection, sortBy));
         return accountRepository.findAccountsByOwnerId(userId, pageable);
@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account updateAccount(Integer userId, Integer accountId, Account account) throws Exception {
+    public Account updateAccount(Long userId, Long accountId, Account account) throws Exception {
         User owner = userService.findUserById(userId);
         Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         prevAccount.setAccountType(
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(prevAccount);
     }
 
-    public Account getAccountAndCheckOwnership(User owner, Integer accountId) throws Exception {
+    public Account getAccountAndCheckOwnership(User owner, Long accountId) throws Exception {
         Optional<Account> accountHolder = accountRepository.findById(accountId);
         if (accountHolder.isPresent()) {
             Account account = accountHolder.get();
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void deleteAccount(Integer userId, Integer accountId) throws Exception {
+    public void deleteAccount(Long userId, Long accountId) throws Exception {
         User owner = userService.findUserById(userId);
         Account prevAccount = getAccountAndCheckOwnership(owner, accountId);
         accountRepository.deleteById(prevAccount.getId());

@@ -12,9 +12,9 @@ public interface UserService {
 
     Page<User> fetchAllUsers(Integer page, Integer size, String sortBy, String direction);
 
-    User updateUser(UpdateUserRequestDto user, Integer userId) throws Exception;
+    User updateUser(UpdateUserRequestDto user, Long userId) throws Exception;
 
-    void deleteUser(Integer userId);
+    void deleteUser(Long userId);
 
-    User findUserById(Integer userId) throws Exception;
+    User findUserById(Long userId) throws Exception;
 }

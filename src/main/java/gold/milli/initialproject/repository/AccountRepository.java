@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Integer> {
-    Page<Account> findAccountsByOwnerId(Integer id, Pageable pageable);
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    Page<Account> findAccountsByOwnerId(Long id, Pageable pageable);
     boolean existsAccountByAccountNumber(String accountNumber);
 
 }

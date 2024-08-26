@@ -58,7 +58,7 @@ public class UserController {
             summary = "update a user",
             description = "update user's username or email"
     )
-    public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Integer userId) throws Exception {
+    public UserDto updateUser(@RequestBody @Valid UpdateUserRequestDto updateUserRequestDto, @PathVariable Long userId) throws Exception {
         return userMapper.toUserDto(userService.updateUser(updateUserRequestDto, userId));
     }
 
@@ -67,7 +67,7 @@ public class UserController {
             summary = "delete a user",
             description = "delete a user by their unique id"
     )
-    public void deleteUser(@PathVariable Integer userId) {
+    public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }
 }
