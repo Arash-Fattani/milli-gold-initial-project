@@ -1,0 +1,19 @@
+server:
+  port: 8282
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/milli-database
+    username: Arash
+    password: milli
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  application:
+    name: milliApplication
+  profiles:
+    active: dev
+
+

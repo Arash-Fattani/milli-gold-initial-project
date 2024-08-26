@@ -1,0 +1,28 @@
+    spring.datasource.hikari.maximum-pool-size: Defines the maximum number of connections in the pool.
+    spring.datasource.hikari.minimum-idle: The minimum number of idle connections in the pool.
+    spring.datasource.hikari.idle-timeout: The maximum amount of time that a connection is allowed to sit idle in the pool.
+    spring.datasource.hikari.connection-timeout: The maximum number of milliseconds that a client will wait for a connection from the pool.
+    spring.jpa.properties.hibernate.cache.use_second_level_cache: Enables second-level caching in Hibernate. Can be set to true or false.
+    spring.jpa.properties.hibernate.cache.region.factory_class: Defines the cache provider. For example, org.hibernate.cache.jcache.JCacheRegionFactory for JCache.
+    spring.jpa.properties.hibernate.cache.use_query_cache: Enables query caching. This can improve performance by caching the results of queries.
+@Synchronized is used to ensure thread safety
+@slf4j for logging purposes
+@cleanup for streams connections to clean up them after they are no longer needed
+@Transient for fields that are fields of the class but should not be saved in the database
+@Embedded and @Embeddable abd @SecondaryTable  for composite fields(fields that are not entities but have fields and themselves are a field of an entity) and @Idclass
+@JoinTable is used for many to many relations
+@Lob used to store large objects
+@PrePersist @PreUpdate @PreRemove @PostLoad @PostPersist @PostUpdate @PostRemove used for authentication and auditing
+SqlResultSetMapping is used map sql results to desired object
+@Version keeps track of how many times an object is changed.
+@OrderColumn is used to preserve the order of the items in the list
+@convert and @Converter are used to convert a field in a class to another way of storing in database
+@NamedNativeQuery a native query to be used throughout the code
+
+@Index for indexing the database
+@Cache and @Cacheable for second level caching
+@Parameter in Hibernate is used to provide configuration options to custom types, allowing them to be more flexible and configurable. for security measures for password
+@Access(AccessType.PROPERTY) if i define getters for authentication and checking input
+you can change your id to access others account
+better Exception handling
+the request parameter cannot be null
