@@ -33,6 +33,7 @@ public class User {
     private List<Role> roles;
 
     @OneToMany(mappedBy = "owner")
+    @Column(name = "owned_accounts")
     private List<Account> accounts;
 
     @Override
